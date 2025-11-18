@@ -77,6 +77,20 @@ const deleteUserFromDB = async (_id: string) => {
   if (!result) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   return result;
 };
+// Get logged-in user (Get Me)
+const getMeFromDB = async (userId: string) => {
+  if (!userId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "You have to Sign in.");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  return user;
+};
 
 export const UserServices = {
   createUserIntoDB,
@@ -84,4 +98,5 @@ export const UserServices = {
   getSingleUserFromDB,
   updateUserInDB,
   deleteUserFromDB,
+  getMeFromDB,
 };

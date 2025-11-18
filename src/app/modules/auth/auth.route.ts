@@ -16,6 +16,8 @@ router.post(
 // Refresh token route
 router.post("/refresh-token", AuthController.refreshToken);
 
+// User logout route
+router.post("/logout", AuthController.logoutUser);
 // Forget password route
 // router.post("/forget-password", AuthController.forgetPassword);
 

@@ -79,9 +79,14 @@ const refreshTokenService = async (
 
   return { accessToken: newAccessToken };
 };
+// logout service
+const logoutUserService = async () => {
+  return { message: "Logged out successfully" };
+};
 
 // Export AuthService object
 export const AuthService = {
   loginUserService,
   refreshTokenService,
+  logoutUserService,
 };

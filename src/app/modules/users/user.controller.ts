@@ -34,6 +34,20 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Get Me (Logged-in user data)
+const getMe = catchAsync(async (req: Request, res: Response) => {
+  const userId = req?.user?.sub || req?.user?._id;
+
+  const result = await UserServices.getMeFromDB(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User profile retrieved successfully",
+    data: { user: result },
+  });
+});
+
 // Get single user
 const getSingleUser = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -63,6 +77,6 @@ export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
-
+  getMe,
   deleteUser,
 };

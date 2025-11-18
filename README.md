@@ -61,17 +61,16 @@ Users can assign tasks to team members, track workload capacity, and balance tas
 
 ## **Tech Stack**
 
-| Category            | Technology                                      |
-| ------------------- | ----------------------------------------------- |
-| Backend             | Node.js, Express, MongoDB, Mongoose, TypeScript |
-| Authentication      | JWT, bcrypt                                     |
-| File Handling       | Multer                                          |
-| Validation          | Zod, Validator                                  |
-| Email Service       | Nodemailer                                      |
-| Payment Integration | SSLCommerz                                      |
-| HTTP Requests       | Axios                                           |
-| Environment         | dotenv                                          |
-| Others              | cookie-parser, cors, http-status                |
+| Category       | Technology                                      |
+| -------------- | ----------------------------------------------- |
+| Backend        | Node.js, Express, MongoDB, Mongoose, TypeScript |
+| Authentication | JWT, bcrypt                                     |
+| File Handling  | Multer                                          |
+| Validation     | Zod, Validator                                  |
+|  |
+| HTTP Requests  | Axios                                           |
+| Environment    | dotenv                                          |
+| Others         | cookie-parser, cors, http-status                |
 
 ---
 

@@ -1,73 +1,64 @@
+
+
+
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
-import { TLoginUserResponse, TRefreshTokenResponse } from "./auth.interface";
 import httpStatus from "http-status";
 
-// login controller  function
+// Login
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const loginData = req.body;
+  const { email, password } = req.body;
 
-  const result = await AuthService.loginUserService(loginData);
+  const result = await AuthService.loginUserService({ email, password });
 
-  // pass data to frontend
-  sendResponse<TLoginUserResponse>(res, {
+  // Set refreshToken in httpOnly cookie
+  res.cookie("refreshToken", result.refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  // Send accessToken in response
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "User logged in successfully.",
-    data: result,
+    data: { accessToken: result.accessToken },
   });
 });
 
-// refresh token controller function
+// Refresh token
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  // destructuring refreshToken from cookies
   const { refreshToken } = req.cookies;
 
   const result = await AuthService.refreshTokenService(refreshToken);
 
-  sendResponse<TRefreshTokenResponse>(res, {
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "New access token generated successfully !",
+    message: "New access token generated!",
     data: result,
   });
 });
 
-// forget password
-// const forgetPassword = catchAsync(async (req: Request, res: Response) => {
-//   //  get email from requests
-//   const { email } = req.body;
+// Logout
+const logoutUser = catchAsync(async (req: Request, res: Response) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
 
-//   const result = await AuthService.forgetPasswordService(email);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Logged out successfully!",
+    data: null,
+  });
+});
 
-//   sendResponse<TRefreshTokenResponse>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Success! Please check your email.",
-//     data: result,
-//   });
-// });
+export const AuthController = { loginUser, refreshToken, logoutUser };
 
-//reset password
-// const resetPassword = catchAsync(async (req: Request, res: Response) => {
-//   const user = req.user;
-//   const { newPassword } = req.body;
-
-//   const result = await AuthService.resetPasswordService(user, newPassword);
-
-//   // pass data to frontend
-//   sendResponse<TLoginUserResponse>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Password reset in successful.",
-//     data: result,
-//   });
-// });
-
-// export auth controllers in object
-export const AuthController = {
-  loginUser,
-  refreshToken,
-};
