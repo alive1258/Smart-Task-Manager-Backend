@@ -14,3 +14,8 @@ export interface ITask extends Document {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ITaskCreatePayload extends Partial<ITask> {
+  autoAssign?: boolean;
+  forceAssign?: boolean;
+}

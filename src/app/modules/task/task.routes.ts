@@ -10,14 +10,14 @@ const router = Router();
 
 // Create a new task
 router.post(
-  "/create-tast",
+  "/create-task",
   auth(),
   validateRequest(TaskValidation.createTaskSchema),
   TaskController.createTask
 );
 
 // Get all tasks
-router.get("/", TaskController.getTasks);
+router.get("/", auth(), TaskController.getTasks);
 
 // Update a task
 router.patch(
@@ -27,6 +27,12 @@ router.patch(
   TaskController.updateTask
 );
 // **Auto-Reassign Tasks for a project**
+// Auto-Reassign tasks for a project
+router.post(
+  "/auto-reassign/:projectId",
+  auth(),
+  TaskController.autoReassignTasks
+);
 
 // Delete a task
 router.delete("/:id", auth(), TaskController.deleteTask);
