@@ -1,34 +1,29 @@
 import { Schema, model } from "mongoose";
-import { TTeam } from "./team.interface";
+import { TTeam, TTeamMember } from "./team.interface";
 
-// Define the TTeam
-const trustUsSchema = new Schema<TTeam>(
+const TeamMemberSchema = new Schema<TTeamMember>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    linked_in_url: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-    },
-    position: {
-      type: String,
-      required: true,
-    },
+    name: { type: String, required: true },
+    role: { type: String, required: true },
+    capacity: { type: Number, required: true, min: 0, max: 5 },
   },
-  {
-    timestamps: true,
-  }
+  { _id: false }
 );
 
-// Create and export the TTeam model based on the defined schema
-export const Team = model<TTeam>("Team", trustUsSchema);
+const TeamSchema = new Schema<TTeam>(
+  {
+    name: { type: String, required: true },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    members: {
+      type: [TeamMemberSchema],
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
+
+export const Team = model<TTeam>("Team", TeamSchema);

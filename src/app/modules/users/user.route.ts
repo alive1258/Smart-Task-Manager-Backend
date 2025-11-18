@@ -2,7 +2,7 @@ import express from "express";
 import { UserControllers } from "./user.controller";
 import { userValidation } from "./user.validation";
 import validateRequest from "../../middleware/validateRequest";
-import auth from "../../middleware/auth";
+// import auth from "../../middleware/auth";
 
 const router = express.Router();
 
@@ -20,14 +20,14 @@ router.get("/", UserControllers.getAllUsers);
 router.get("/:userId", UserControllers.getSingleUser);
 
 // Update user
-router.patch(
-  "/:userId",
-  auth,
-  validateRequest(userValidation.updateUserValidationSchema),
-  UserControllers.updateUser
-);
+// router.patch(
+//   "/:userId",
+//   auth,
+//   validateRequest(userValidation.updateUserValidationSchema),
+//   UserControllers.updateUser
+// );
 
 // Delete user
-router.delete("/:userId", auth, UserControllers.deleteUser);
+router.delete("/:userId", UserControllers.deleteUser);
 
 export const UserRoutes = router;

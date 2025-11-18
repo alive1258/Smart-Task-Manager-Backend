@@ -1,7 +1,15 @@
-export type TTeam = {
+import { Document, Types } from "mongoose";
+
+export type TTeamMember = {
   name: string;
-  position: string;
-  email: string;
-  linked_in_url: string;
-  image: string;
+  role: string;
+  capacity: number; // 0–5
 };
+
+export interface TTeam extends Document {
+  name: string;
+  owner: Types.ObjectId;
+  members: TTeamMember[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}

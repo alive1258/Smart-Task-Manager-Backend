@@ -1,38 +1,28 @@
 import express from "express";
-import validateRequest from "../../middleware/validateRequest";
-import { TeamValidation } from "./team.validation";
 import { TeamControllers } from "./team.controller";
 import auth from "../../middleware/auth";
-import { ENUM_ROLE } from "../../../enums/user";
+import validateRequest from "../../middleware/validateRequest";
+import { TeamValidation } from "./team.validation";
 
 const router = express.Router();
 
-// Route to create a new trustUsId
 router.post(
   "/create-team",
-  auth(ENUM_ROLE.SUPER_ADMIN, ENUM_ROLE.ADMIN),
+  auth(),
   validateRequest(TeamValidation.createTeamValidationSchema),
   TeamControllers.createTeam
 );
 
-// Route to get all trustUs
-router.get("/", TeamControllers.getAllTeam);
+router.get("/", auth(), TeamControllers.getAllTeams);
+router.get("/:id", auth(), TeamControllers.getSingleTeam);
 
-// Route to get a single trustUs by ID
-router.get("/:teamId", TeamControllers.getSingleTeam);
-
-// Route to update a trustUs by ID
 router.patch(
-  "/:teamId",
-  auth(ENUM_ROLE.SUPER_ADMIN, ENUM_ROLE.ADMIN),
+  "/:id",
+  auth(),
+  validateRequest(TeamValidation.updateTeamValidationSchema),
   TeamControllers.updateTeam
 );
 
-// Route to delete a trustUs by ID
-router.delete(
-  "/:teamId",
-  auth(ENUM_ROLE.SUPER_ADMIN, ENUM_ROLE.ADMIN),
-  TeamControllers.deleteTeam
-);
+router.delete("/:id", auth(), TeamControllers.deleteTeam);
 
 export const TeamRoutes = router;

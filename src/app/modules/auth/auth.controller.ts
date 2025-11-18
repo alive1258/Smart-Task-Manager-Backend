@@ -35,25 +35,39 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// forget password
+// const forgetPassword = catchAsync(async (req: Request, res: Response) => {
+//   //  get email from requests
+//   const { email } = req.body;
+
+//   const result = await AuthService.forgetPasswordService(email);
+
+//   sendResponse<TRefreshTokenResponse>(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Success! Please check your email.",
+//     data: result,
+//   });
+// });
+
 //reset password
-const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user;
-  const { newPassword } = req.body;
+// const resetPassword = catchAsync(async (req: Request, res: Response) => {
+//   const user = req.user;
+//   const { newPassword } = req.body;
 
-  const result = await AuthService.resetPasswordService(user, newPassword);
+//   const result = await AuthService.resetPasswordService(user, newPassword);
 
-  // pass data to frontend
-  sendResponse<TLoginUserResponse>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Password reset in successful.",
-    data: result,
-  });
-});
+//   // pass data to frontend
+//   sendResponse<TLoginUserResponse>(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Password reset in successful.",
+//     data: result,
+//   });
+// });
 
 // export auth controllers in object
 export const AuthController = {
   loginUser,
   refreshToken,
-  resetPassword,
 };

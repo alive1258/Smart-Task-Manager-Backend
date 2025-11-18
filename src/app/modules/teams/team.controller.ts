@@ -1,27 +1,37 @@
+import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
-import catchAsync from "../../utils/catchAsync";
-
 import { TeamServices } from "./team.service";
 
-// Controller to handle Team creation
-const createTeam = catchAsync(async (req, res) => {
-  const teamData = req.body;
-
-  const result = await TeamServices.createTeamIntoDB(teamData);
-
+const createTeam = catchAsync(async (req: Request, res: Response) => {
+  // If user is logged in via auth middleware, use their _id
+  const ownerId: string = req.user?._id as string;
+  const result = await TeamServices.createTeamIntoDB(ownerId, req.body);
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     success: true,
     message: "Team created successfully",
     data: result,
   });
 });
 
-// Controller to handle retrieving all heroes
-const getAllTeam = catchAsync(async (req, res) => {
-  const result = await TeamServices.getAllTeamFromDB();
+const getAllTeams = catchAsync(async (req: Request, res: Response) => {
+  const ownerId: string = req.user?._id as string;
+  console.log("Teams Owner ID:", ownerId);
+  const result = await TeamServices.getAllTeamsFromDB(ownerId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Teams retrieved successfully",
+    data: result,
+  });
+});
 
+const getSingleTeam = catchAsync(async (req: Request, res: Response) => {
+  const ownerId: string = req.user?._id as string;
+  const { id } = req.params;
+  const result = await TeamServices.getSingleTeamFromDB(id, ownerId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -30,62 +40,33 @@ const getAllTeam = catchAsync(async (req, res) => {
   });
 });
 
-// Controller to handle retrieving a single Team by ID
-const getSingleTeam = catchAsync(async (req, res) => {
-  const { teamId } = req.params;
-  const result = await TeamServices.getSingleTeamFromDB(teamId);
-
-  if (!result) {
-    return res.status(404).json({
-      success: false,
-      message: "Team data not found",
-    });
-  }
-
+const updateTeam = catchAsync(async (req: Request, res: Response) => {
+  const ownerId: string = req.user?._id as string;
+  const { id } = req.params;
+  const result = await TeamServices.updateTeamInDB(id, ownerId, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Single Team retrieved successfully",
+    message: "Team updated successfully",
     data: result,
   });
 });
 
-// Controller to handle updating a team by ID
-const updateTeam = catchAsync(async (req, res) => {
-  const { teamId } = req.params;
-  const updateData = req.body;
-  const result = await TeamServices.updateTeamInDB(teamId, updateData);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "team updated successfully",
-    data: result,
-  });
-});
-
-// Controller to handle deleting a teamId by ID
-const deleteTeam = catchAsync(async (req, res) => {
-  const { teamId } = req.params;
-  const result = await TeamServices.deleteTeamFromDB(teamId);
-  if (!result) {
-    return res.status(404).json({
-      success: false,
-      message: "Team not found",
-    });
-  }
-
+const deleteTeam = catchAsync(async (req: Request, res: Response) => {
+  const ownerId: string = req.user?._id as string;
+  const { id } = req.params;
+  await TeamServices.deleteTeamFromDB(id, ownerId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Team deleted successfully",
-    data: "",
+    data: null,
   });
 });
 
 export const TeamControllers = {
   createTeam,
-  getAllTeam,
+  getAllTeams,
   getSingleTeam,
   updateTeam,
   deleteTeam,

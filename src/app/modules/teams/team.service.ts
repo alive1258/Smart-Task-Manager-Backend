@@ -1,55 +1,50 @@
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
-import { TTeam } from "./team.interface";
 import { Team } from "./team.module";
+import { TTeam } from "./team.interface";
 
-// Service to create a new Team in the database
-const createTeamIntoDB = async (heroData: TTeam) => {
-  const result = await Team.create(heroData);
-
-  return result;
-};
-
-// Service to retrieve all Team from the database
-const getAllTeamFromDB = async () => {
-  const result = await Team.find();
-  return result;
-};
-
-// Service to retrieve a single Team from the database by ID
-const getSingleTeamFromDB = async (_id: string) => {
-  const result = await Team.findOne({ _id });
-  return result;
-};
-
-// Service to update a Team in the database by ID
-const updateTeamInDB = async (_id: string, updateData: Partial<TTeam>) => {
-  const result = await Team.findByIdAndUpdate(_id, updateData, {
-    new: true,
+const createTeamIntoDB = async (ownerId: string, payload: Partial<TTeam>) => {
+  const result = await Team.create({
+    name: payload.name,
+    owner: ownerId,
+    members: payload.members || [],
   });
-
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Team Data not found");
-  }
-
   return result;
 };
 
-// Service to delete a Team from the database by ID
-const deleteTeamFromDB = async (_id: string) => {
-  const result = await Team.findByIdAndDelete(_id);
-
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Team Data not found");
-  }
-
-  return result;
+const getAllTeamsFromDB = async (ownerId: string) => {
+  return await Team.find({ owner: ownerId });
 };
 
-// Export the Team services as an object for use in other parts of the application
+const getSingleTeamFromDB = async (teamId: string, ownerId: string) => {
+  const team = await Team.findOne({ _id: teamId, owner: ownerId });
+  if (!team) throw new ApiError(httpStatus.NOT_FOUND, "Team not found");
+  return team;
+};
+
+const updateTeamInDB = async (
+  teamId: string,
+  ownerId: string,
+  updateData: Partial<TTeam>
+) => {
+  const updated = await Team.findOneAndUpdate(
+    { _id: teamId, owner: ownerId },
+    updateData,
+    { new: true }
+  );
+  if (!updated) throw new ApiError(httpStatus.NOT_FOUND, "Team not found");
+  return updated;
+};
+
+const deleteTeamFromDB = async (teamId: string, ownerId: string) => {
+  const deleted = await Team.findOneAndDelete({ _id: teamId, owner: ownerId });
+  if (!deleted) throw new ApiError(httpStatus.NOT_FOUND, "Team not found");
+  return deleted;
+};
+
 export const TeamServices = {
   createTeamIntoDB,
-  getAllTeamFromDB,
+  getAllTeamsFromDB,
   getSingleTeamFromDB,
   updateTeamInDB,
   deleteTeamFromDB,

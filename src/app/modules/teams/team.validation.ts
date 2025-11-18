@@ -1,22 +1,22 @@
 import { z } from "zod";
 
-// Zod schema for Hero
-const createTeamValidationSchema = z.object({
+const teamMemberSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  role: z.string().min(1, "Role is required"),
+  capacity: z.number().min(0).max(5, "Capacity must be 0–5"),
+});
+
+export const createTeamValidationSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, "Title is required"),
-    email: z.string().trim().min(1, "email is required"),
-    linked_in_url: z.string().trim().min(1, "linked_in_url is required"),
-    image: z.string(),
-    position: z.string().trim().min(1, "position is required"),
+    name: z.string().min(1, "Team name is required"),
+    members: z.array(teamMemberSchema).optional(),
   }),
 });
-const updateTeamValidationSchema = z.object({
+
+export const updateTeamValidationSchema = z.object({
   body: z.object({
-    name: z.string().trim().min(1, "Title is required"),
-    email: z.string().trim().min(1, "Title is required"),
-    linked_in_url: z.string().trim().min(1, "linked_in_url is required"),
-    image: z.string(),
-    position: z.string().trim().min(1, "position is required"),
+    name: z.string().optional(),
+    members: z.array(teamMemberSchema).optional(),
   }),
 });
 

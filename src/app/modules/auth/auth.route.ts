@@ -2,13 +2,13 @@ import express from "express";
 import { AuthController } from "./auth.controller";
 import validateRequest from "../../middleware/validateRequest";
 import { AuthValidation } from "./auth.validation";
-import auth from "../../middleware/auth";
 
 const router = express.Router();
 
 // User login route
 router.post(
   "/login",
+
   validateRequest(AuthValidation.userLoginZodSchema),
   AuthController.loginUser
 );
@@ -20,6 +20,6 @@ router.post("/refresh-token", AuthController.refreshToken);
 // router.post("/forget-password", AuthController.forgetPassword);
 
 // Reset password route (no role verification)
-router.post("/reset-password", auth, AuthController.resetPassword);
+// router.post("/reset-password", AuthController.resetPassword);
 
 export const AuthRoutes = router;
