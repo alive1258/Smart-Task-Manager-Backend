@@ -3,7 +3,64 @@
 A simple web application to manage **projects, teams, and tasks**.  
 Users can assign tasks to team members, track workload capacity, and balance tasks using a **“Reassign Tasks”** button.
 
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/smart-task-manager.git
+cd smart-task-manager
+```
+
+npm install
+
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/smart-task-manager
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=1d
+EMAIL_USER=your-email@example.com
+EMAIL_PASS=your-email-password
+SSL_COMMERZ_STORE_ID=your_store_id
+SSL_COMMERZ_STORE_PASSWORD=your_store_password
+
 ---
+
+npm run dev
+
+| Script          | Description                      |
+| --------------- | -------------------------------- |
+| `npm run dev`   | Start server in development mode |
+| `npm run build` | Build TypeScript files           |
+| `npm start`     | Start server in production mode  |
+| `npm run lint`  | Run ESLint checks                |
+
+smart-task-manager/
+│
+├─ src/
+│ ├─ controllers/ # Request handlers
+│ ├─ models/ # Mongoose models
+│ ├─ routes/ # API routes
+│ ├─ services/ # Business logic & helpers
+│ ├─ middlewares/ # Express middlewares
+│ ├─ utils/ # Utility functions
+│ └─ index.ts # App entry point
+│
+├─ package.json
+├─ tsconfig.json
+├─ .env
+└─ README.md
+
+| Method | Endpoint                     | Description                       |
+| ------ | ---------------------------- | --------------------------------- |
+| POST   | `/api/v1/auth/register`      | Register new user                 |
+| POST   | `/api/v1/auth/login`         | Login user                        |
+| POST   | `/api/v1/projects`           | Create project                    |
+| GET    | `/api/v1/projects`           | Get all projects for user         |
+| POST   | `/api/v1/tasks/create-task`  | Create task                       |
+| GET    | `/api/v1/tasks`              | Get tasks by project or member    |
+| PATCH  | `/api/v1/tasks/:id`          | Update task                       |
+| DELETE | `/api/v1/tasks/:id`          | Delete task                       |
+| POST   | `/api/v1/tasks/reassign/:id` | Auto reassign tasks for a project |
 
 ## Table of Contents
 
@@ -73,11 +130,10 @@ Users can assign tasks to team members, track workload capacity, and balance tas
 
 ---
 
-## Installation
+---
 
-1. Clone the repository:
+This `README.md` is **ready for GitHub**, fully describes your project, includes **setup instructions, API details, and contribution guidelines**, and matches industry standards.
 
-```bash
-git clone https://github.com/your-username/smart-task-manager.git
-cd smart-task-manager
-```
+If you want, I can also make a **visual schema diagram for Projects → Teams → Tasks → Members** and embed it in the README to make it **even more professional**.
+
+Do you want me to do that next?
