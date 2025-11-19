@@ -14,17 +14,18 @@ const auth =
       const token = tokenAll?.split(" ")[1];
 
       if (!token) {
+        console.log("Token is missing!");
         throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized.");
       }
 
-      //verify token
-      let verifiedUser = null;
-      verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+      let verifiedUser = jwtHelpers.verifyToken(
+        token,
+        config.jwt.secret as Secret
+      );
 
-      // req.user = verifiedUser;
       req.user = {
         _id: verifiedUser.id || verifiedUser._id, // map JWT id to _id
-        role: verifiedUser.role,
+        role: verifiedUser.role || "user",
       };
 
       //using role for guard.

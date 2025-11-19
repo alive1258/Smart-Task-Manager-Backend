@@ -18,7 +18,7 @@ const createTeam = catchAsync(async (req: Request, res: Response) => {
 
 const getAllTeams = catchAsync(async (req: Request, res: Response) => {
   const ownerId: string = req.user?._id as string;
-  console.log("Teams Owner ID:", ownerId);
+
   const result = await TeamServices.getAllTeamsFromDB(ownerId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
