@@ -5,7 +5,6 @@ export type TUser = Document & {
   password: string;
   gender: "male" | "female" | "other";
   email: string;
-  isDeleted: boolean;
 };
 
 // Static methods interface

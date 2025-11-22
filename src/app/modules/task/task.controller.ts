@@ -27,6 +27,20 @@ export const TaskController = {
     });
   }),
 
+  getTasksByProject: catchAsync(async (req: Request, res: Response) => {
+    const ownerId = req.user?._id as string;
+    const { projectId } = req.params;
+
+    const tasks = await TaskService.getTasksByProject(ownerId, projectId);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Tasks retrieved successfully",
+      data: tasks,
+    });
+  }),
+
   updateTask: catchAsync(async (req: Request, res: Response) => {
     const ownerId = req.user?._id as string;
     const task = await TaskService.updateTask(ownerId, req.params.id, req.body);

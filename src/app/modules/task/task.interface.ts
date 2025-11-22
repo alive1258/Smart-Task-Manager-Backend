@@ -16,6 +16,7 @@ export interface ITask extends Document {
 }
 
 export interface ITaskCreatePayload extends Partial<ITask> {
+  dueDate: { dueDate: any };
   autoAssign?: boolean;
   forceAssign?: boolean;
 }

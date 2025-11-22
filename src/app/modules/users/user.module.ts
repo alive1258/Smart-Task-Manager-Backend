@@ -14,7 +14,6 @@ const userSchema = new Schema<TUser, UserModel>(
       unique: true,
       default: () => new Types.ObjectId().toString(),
     },
-    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

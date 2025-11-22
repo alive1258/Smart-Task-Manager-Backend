@@ -11,21 +11,29 @@ const auth =
     try {
       // get authorization token
       const tokenAll = req.headers.authorization;
+
       const token = tokenAll?.split(" ")[1];
 
       if (!token) {
-        console.log("Token is missing!");
         throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized.");
       }
 
-      let verifiedUser = jwtHelpers.verifyToken(
-        token,
-        config.jwt.secret as Secret
-      );
+      //verify token
+      let verifiedUser = null;
+      // verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+      try {
+        verifiedUser = jwtHelpers.verifyToken(
+          token,
+          config.jwt.secret as Secret
+        );
+      } catch (jwtError) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token.");
+      }
 
+      // req.user = verifiedUser;
       req.user = {
         _id: verifiedUser.id || verifiedUser._id, // map JWT id to _id
-        role: verifiedUser.role || "user",
+        role: verifiedUser.role,
       };
 
       //using role for guard.

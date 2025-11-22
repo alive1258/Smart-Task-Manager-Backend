@@ -19,6 +19,8 @@ router.post(
 // Get all tasks
 router.get("/", auth(), TaskController.getTasks);
 
+router.get("/project/:projectId", TaskController.getTasksByProject);
+
 // Update a task
 router.patch(
   "/:id",

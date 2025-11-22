@@ -9,7 +9,6 @@ export const createUserValidationSchema = z.object({
       errorMap: () => ({ message: "Invalid gender" }),
     }),
     email: z.string().trim().email("Invalid email format"),
-    isDeleted: z.boolean().optional().default(false),
   }),
 });
 

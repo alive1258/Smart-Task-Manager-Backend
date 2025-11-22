@@ -20,7 +20,7 @@ const loginUserService = async (
   // Find the user by email
   const userData = await User.findOne(
     { email },
-    { _id: 1, email: 1, password: 1 }
+    { _id: 1, email: 1, password: 1, role: 1 }
   ).lean();
 
   if (!userData) {
