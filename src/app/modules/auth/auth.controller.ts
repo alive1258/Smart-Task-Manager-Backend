@@ -1,6 +1,3 @@
-
-
-
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { AuthService } from "./auth.service";
@@ -14,25 +11,26 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.loginUserService({ email, password });
 
   // Set refreshToken in httpOnly cookie
-  res.cookie("refreshToken", result.refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
+  // res.cookie("refreshToken", result.refreshToken, {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   sameSite: "strict",
+  //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  // });
 
   // Send accessToken in response
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "User logged in successfully.",
-    data: { accessToken: result.accessToken },
+    data: result,
   });
 });
 
 // Refresh token
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
+  const { refreshToken } = req.body;
+  console.log(refreshToken, "refreshToken,,,,,,,,,,,,,,");
 
   const result = await AuthService.refreshTokenService(refreshToken);
 
@@ -61,4 +59,3 @@ const logoutUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const AuthController = { loginUser, refreshToken, logoutUser };
-
